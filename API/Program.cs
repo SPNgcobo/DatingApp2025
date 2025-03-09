@@ -1,3 +1,7 @@
+// Author: Samkelo Perciville Ngcobo
+// Student Number: 2021771874
+// Project: Dating App
+
 using API;
 using API.Extensions;
 
