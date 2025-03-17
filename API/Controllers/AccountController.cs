@@ -11,33 +11,30 @@ namespace API.Controllers;
 public class AccountController(DataContext context, ITokenService tokenService) : BaseApiController
 {
     [HttpPost("register")]
-public async Task<ActionResult<UserDto>> Register(RegisterDto registerDto)
-{
-    if (await UserExists(registerDto.UserName)) return BadRequest("Username is taken");
-
-    using var hmac = new HMACSHA512();
-
-    var user = new AppUser
+    public async Task<ActionResult<UserDto>> Register(RegisterDto registerDto)
     {
-        UserName = registerDto.UserName.ToLower(),
-        PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(registerDto.Password)),
-        PasswordSalt = hmac.Key,
-        KnownAs = registerDto.KnownAs ?? registerDto.UserName, 
-        Gender = registerDto.Gender ?? "Not Specified", 
-        City = registerDto.City ?? "Unknown", 
-        Country = registerDto.Country ?? "Unknown" 
-    };
+        if (await UserExists(registerDto.UserName)) return BadRequest("Username is taken");
 
-    context.Users.Add(user);
-    await context.SaveChangesAsync();
+        return Ok();
+        // using var hmac = new HMACSHA512();
 
-    return new UserDto
-    {
-        Username = user.UserName,
-        Token = tokenService.CreateToken(user)
-    };
-}
+        // var user = new AppUser
+        // {
 
+        //     UserName = registerDto.UserName.ToLower(),
+        //     PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(registerDto.Password)),
+        //     PasswordSalt = hmac.Key
+        // };
+
+        // context.Users.Add(user);
+        // await context.SaveChangesAsync();
+
+        // return new UserDto
+        // {
+        //     Username = user.UserName,
+        //     Token = tokenService.CreateToken(user)
+        // };
+    }
 
     [HttpPost("login")]
     public async Task<ActionResult<UserDto>> Login(LoginDto loginDto)

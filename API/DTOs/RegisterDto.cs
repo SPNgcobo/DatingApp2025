@@ -11,9 +11,4 @@ public class RegisterDto
     [StringLength(8, MinimumLength = 4)]
     public string Password { get; set; } = string.Empty;
 
-    public string? KnownAs { get; set; }
-    public string? Gender { get; set; }
-    public string? City { get; set; }
-    public string? Country { get; set; }
-
 }
