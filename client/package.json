@@ -51,5 +51,11 @@
       "@angular/animations": "$@angular/animations",
       "@angular/forms": "$@angular/forms"
     }
+  },
+  "overrides": {
+    "ng2-file-upload": {
+      "@angular/common": "$@angular/common",
+      "@angular/core": "$@angular/core"
+    }
   }
 }
