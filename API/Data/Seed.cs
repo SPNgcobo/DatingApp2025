@@ -15,7 +15,7 @@ public class Seed
 
         var userData = await File.ReadAllTextAsync("Data/UserSeedData.json");
 
-        var options = new JsonSerializerOptions{PropertyNameCaseInsensitive = true};
+        var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
 
         var users = JsonSerializer.Deserialize<List<AppUser>>(userData, options);
 
@@ -23,9 +23,10 @@ public class Seed
 
         var roles = new List<AppRole>
         {
-            new() {Name = "Member"},
-            new() {Name = "Admin"},
-            new() {Name = "Moderator"},
+            new() { Name = "Member" },
+            new() { Name = "Admin" },
+            new() { Name = "Moderator" },
+            new() { Name = "VIP" },
         };
 
         foreach (var role in roles)
@@ -49,7 +50,20 @@ public class Seed
             Country = "",
         };
 
+    
+        var vip = new AppUser
+        {
+            UserName = "vip",
+            KnownAs = "VIP",
+            Gender = "",
+            City = "",
+            Country = ""
+        };
+
         await userManager.CreateAsync(admin, "Pa$$w0rd");
+        await userManager.CreateAsync(vip, "Pa$$w0rd"); 
+
         await userManager.AddToRolesAsync(admin, ["Admin", "Moderator"]);
+        await userManager.AddToRolesAsync(vip, ["VIP", "Moderator"]); 
     }
 }

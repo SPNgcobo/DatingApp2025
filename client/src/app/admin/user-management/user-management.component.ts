@@ -3,6 +3,7 @@ import { AdminService } from '../../_services/admin.service';
 import { User } from '../../_models/user';
 import { BsModalRef, BsModalService, ModalOptions } from 'ngx-bootstrap/modal';
 import { RolesModalComponent } from '../../modals/roles-modal/roles-modal.component';
+import { VipService } from '../../_services/vip.service';
 
 @Component({
   selector: 'app-user-management',
@@ -13,6 +14,7 @@ import { RolesModalComponent } from '../../modals/roles-modal/roles-modal.compon
 })
 export class UserManagementComponent implements OnInit {
   private adminService = inject(AdminService);
+  private vipService = inject(VipService);
   private modalService = inject(BsModalService);
   users: User[] = [];
 
@@ -29,7 +31,7 @@ export class UserManagementComponent implements OnInit {
         title: 'User roles',
         username: user.username,
         selectedRoles: [...user.roles],
-        availableRoles: ['Admin', 'Moderator', 'Member'],
+        availableRoles: ['Admin', 'Moderator', 'VIP', 'Member'],
         users: this.users,
         rolesUpdated: false
       }
@@ -41,6 +43,9 @@ export class UserManagementComponent implements OnInit {
           const selectedRoles = this.bsModalRef.content.selectedRoles;
           this.adminService.updateUserRoles(user.username, selectedRoles).subscribe({
             next: roles => user.roles = roles
+          });
+          this.vipService.updateUserRoles(user.username, selectedRoles).subscribe({
+            next: roles => user.roles = roles
           })
         }
       }
@@ -49,6 +54,9 @@ export class UserManagementComponent implements OnInit {
 
   getUsersWithRoles() {
     this.adminService.getUserWithRoles().subscribe({
+      next: users => this.users = users
+    })
+    this.vipService.getUserWithRoles().subscribe({
       next: users => this.users = users
     })
   }
