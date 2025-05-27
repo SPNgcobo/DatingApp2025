@@ -5,11 +5,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace API.Data;
 
-public class DataContext(DbContextOptions options) : IdentityDbContext<AppUser, AppRole, int, 
-    IdentityUserClaim<int>, AppUserRole, IdentityUserLogin<int>, IdentityRoleClaim<int>, 
+public class DataContext(DbContextOptions options) : IdentityDbContext<AppUser, AppRole, int,
+    IdentityUserClaim<int>, AppUserRole, IdentityUserLogin<int>, IdentityRoleClaim<int>,
     IdentityUserToken<int>>(options)
 {
     public DbSet<UserLike> Likes { get; set; }
+    public DbSet<UserVisit> Visits { get; set; }
     public DbSet<Message> Messages { get; set; }
     public DbSet<Group> Groups { get; set; }
     public DbSet<Connection> Connections { get; set; }
@@ -31,7 +32,7 @@ public class DataContext(DbContextOptions options) : IdentityDbContext<AppUser, 
             .IsRequired();
 
         builder.Entity<UserLike>()
-            .HasKey(k => new {k.SourceUserId, k.TargetUserId});
+            .HasKey(k => new { k.SourceUserId, k.TargetUserId });
 
         builder.Entity<UserLike>()
             .HasOne(s => s.SourceUser)
@@ -43,6 +44,21 @@ public class DataContext(DbContextOptions options) : IdentityDbContext<AppUser, 
             .HasOne(s => s.TargetUser)
             .WithMany(l => l.LikedByUsers)
             .HasForeignKey(s => s.TargetUserId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        builder.Entity<UserVisit>()
+            .HasKey(k => new { k.SourceUserId, k.TargetUserId });
+
+        builder.Entity<UserVisit>()
+            .HasOne(v => v.SourceUser)
+            .WithMany(u => u.VisitedUsers)
+            .HasForeignKey(v => v.SourceUserId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        builder.Entity<UserVisit>()
+            .HasOne(v => v.TargetUser)
+            .WithMany(u => u.VisitedByUsers)
+            .HasForeignKey(v => v.TargetUserId)
             .OnDelete(DeleteBehavior.Cascade);
 
         builder.Entity<Message>()

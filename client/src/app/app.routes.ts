@@ -16,6 +16,7 @@ import { AdminPanelComponent } from './admin/admin-panel/admin-panel.component';
 import { adminGuard } from './_guards/admin.guard';
 import { VipPanelComponent } from './admin/vip-panel/vip-panel.component';
 import { vipGuard } from './_guards/vip.guard';
+import { VisitsComponent } from './visits/visits.component';
 
 export const routes: Routes = [
     { path: '', component: HomeComponent },
@@ -30,6 +31,7 @@ export const routes: Routes = [
             { path: 'member/edit', component: MemberEditComponent, 
                 canDeactivate: [preventUnsavedChangesGuard]},
             { path: 'lists', component: ListsComponent },
+            { path: 'visits', component: VisitsComponent, canActivate: [vipGuard] },
             { path: 'messages', component: MessagesComponent },
             { path: 'admin', component: AdminPanelComponent, canActivate: [adminGuard] },
             { path: 'vip', component: VipPanelComponent, canActivate: [vipGuard] }

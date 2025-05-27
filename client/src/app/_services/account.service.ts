@@ -1,10 +1,11 @@
 import { HttpClient } from '@angular/common/http';
-import { computed, inject, Injectable, model, signal } from '@angular/core';
+import { computed, inject, Injectable, signal } from '@angular/core';
 import type { User } from '../_models/user';
 import { map, type Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { LikesService } from './likes.service';
 import { PrecenceService } from './presence.service';
+import { VisitsService } from './visits.service';
 
 @Injectable({
   providedIn: 'root'
@@ -12,9 +13,12 @@ import { PrecenceService } from './presence.service';
 export class AccountService {
   private http = inject(HttpClient);
   private likeService = inject(LikesService);
+  private visitService = inject(VisitsService); 
   private presenceService = inject(PrecenceService);
+
   baseUrl = environment.apiUrl;
   currentUser = signal<User | null>(null);
+
   roles = computed(() => {
     const user = this.currentUser();
     if (user && user.token) {
@@ -22,7 +26,7 @@ export class AccountService {
       return Array.isArray(role) ? role : [role];
     }
     return [];
-  })
+  });
 
   login(model: any) {
     return this.http.post<User>(this.baseUrl + 'account/login', model).pipe(
@@ -31,8 +35,7 @@ export class AccountService {
           this.setCurrentUser(user);
         }
       })
-    )
-
+    );
   }
 
   register(model: any) {
@@ -43,15 +46,17 @@ export class AccountService {
         }
         return user;
       })
-    )
-
+    );
   }
 
   setCurrentUser(user: User) {
     localStorage.setItem('user', JSON.stringify(user));
     this.currentUser.set(user);
-    this.likeService.getLikeIds();
-    this.presenceService.createHubConnection(user)
+
+    this.likeService.getLikeIds(); 
+    this.visitService.getVisitIds(); 
+
+    this.presenceService.createHubConnection(user);
   }
 
   logout() {
