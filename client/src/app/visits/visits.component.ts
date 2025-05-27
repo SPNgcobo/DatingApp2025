@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, type OnDestroy } from '@angular/core';
+import { Component, inject, OnInit, OnDestroy } from '@angular/core';
 import { ButtonsModule } from 'ngx-bootstrap/buttons';
 import { FormsModule } from '@angular/forms';
 import { MemberCardComponent } from "../members/member-card/member-card.component";
@@ -15,6 +15,7 @@ import { VisitsService } from '../_services/visits.service';
 export class VisitsComponent implements OnInit, OnDestroy {
   visitsService = inject(VisitsService);
   predicate = 'visited';
+  orderBy = 'lastActive'; 
   pageNumber = 1;
   pageSize = 5;
 
@@ -23,10 +24,10 @@ export class VisitsComponent implements OnInit, OnDestroy {
   }
 
   getTitle() {
-    switch(this.predicate) {
+    switch (this.predicate) {
       case 'visited': return 'Members you visit';
       case 'visitedBy': return 'Members who visit you';
-      default: return 'Mutual'
+      default: return 'Mutual';
     }
   }
 
@@ -44,5 +45,4 @@ export class VisitsComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.visitsService.paginatedResult.set(null);
   }
-
 }
