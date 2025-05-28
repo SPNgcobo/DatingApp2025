@@ -8,7 +8,7 @@ namespace API.Extensions;
 public static class ApplicationServiceExtensions
 {
     public static IServiceCollection AddApplicationServices(this IServiceCollection services,
-    IConfiguration config)
+        IConfiguration config)
     {
         services.AddControllers();
         services.AddDbContext<DataContext>(opt =>
@@ -21,6 +21,7 @@ public static class ApplicationServiceExtensions
         services.AddScoped<ILikesRepository, LikesRepository>();
         services.AddScoped<IVisitsRepository, VisitsRepository>();
         services.AddScoped<IMessageRepository, MessageRepository>();
+        services.AddScoped<IPhotoRepository, PhotoRepository>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddScoped<IPhotoService, PhotoService>();
         services.AddScoped<LogUserActivity>();
